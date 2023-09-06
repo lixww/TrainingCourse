@@ -1,7 +1,11 @@
 package com.example.trainingcourseapp.ui.composepages
 
+import android.content.Intent
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +19,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,10 +34,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.modifier.modifierLocalOf
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.trainingcourseapp.R
+import com.example.trainingcourseapp.activity.TrainDetailActivity
+import com.example.trainingcourseapp.ui.findActivity
 import com.example.trainingcourseapp.ui.theme.TrainingCourseAppTheme
 
 
@@ -45,7 +57,7 @@ fun HomePagePreview() {
             color = MaterialTheme.colorScheme.surface
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                OneTitle(text = "动作集")
+                OneTitle(text = "动作集", isHomePage = true)
                 Greeting("Android")
                 TrainList()
             }
@@ -56,6 +68,8 @@ fun HomePagePreview() {
 
 @Composable
 fun TrainList() {
+    val context = LocalContext.current.findActivity()
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 20.dp),
@@ -79,7 +93,14 @@ fun TrainList() {
                             .fillMaxWidth()
                             .height(140.dp)
                             .background(Color(0xff93C583))
-
+                            .clickable {
+                                context?.startActivity(
+                                    Intent(
+                                        context,
+                                        TrainDetailActivity::class.java
+                                    )
+                                )
+                            }
                     )
 
                     Text(
@@ -162,12 +183,27 @@ fun GreetingPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OneTitle(text: String) {
+fun OneTitle(text: String, isHomePage: Boolean = false) {
+    val context = LocalContext.current.findActivity()
+
     TopAppBar(
         title = {
             Text(text = text, modifier = Modifier.padding(10.dp))
         },
-        modifier = Modifier.wrapContentSize(align = Alignment.Center)
+        modifier = Modifier.wrapContentSize(align = Alignment.Center),
+        navigationIcon = {
+            if (!isHomePage) {
+                IconButton(onClick = {
+                    context?.finish()
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.round_arrow_back_ios_24),
+                        contentDescription = "Back"
+                    )
+                }
+            }
+
+        }
     )
 
 }

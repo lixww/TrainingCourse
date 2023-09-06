@@ -1,4 +1,4 @@
-package com.example.trainingcourseapp
+package com.example.trainingcourseapp.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,12 +9,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.trainingcourseapp.ui.composepages.TrainList
-import com.example.trainingcourseapp.ui.composepages.Greeting
+import com.example.trainingcourseapp.ui.composepages.ActionInfoCard
 import com.example.trainingcourseapp.ui.composepages.OneTitle
 import com.example.trainingcourseapp.ui.theme.TrainingCourseAppTheme
 
-class MainActivity : ComponentActivity() {
+class ActionDetailActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,12 +22,13 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.surface
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        OneTitle(text = "动作集", isHomePage = true)
-                        Greeting("Android")
-                        TrainList()
+                        OneTitle(text = "动作详情")
+                        ActionInfoCard("动作名称")
+                        ActionInfoCard("动作示意")
+                        ActionInfoCard("动作时长")
 
                     }
 
