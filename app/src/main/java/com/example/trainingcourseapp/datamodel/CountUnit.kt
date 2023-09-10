@@ -1,4 +1,4 @@
-package com.example.trainingcourseapp.ui.datamodel
+package com.example.trainingcourseapp.datamodel
 
 data class CountUnit(
     /**
