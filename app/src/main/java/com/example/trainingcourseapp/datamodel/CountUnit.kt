@@ -1,5 +1,7 @@
 package com.example.trainingcourseapp.datamodel
 
+import java.io.Serializable
+
 data class CountUnit(
     /**
      * 展示文本
@@ -13,4 +15,4 @@ data class CountUnit(
      * 时长
      */
     val asDuration: Long
-)
+) : Serializable

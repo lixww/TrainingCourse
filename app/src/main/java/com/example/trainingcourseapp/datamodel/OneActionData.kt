@@ -1,5 +1,7 @@
 package com.example.trainingcourseapp.datamodel
 
+import java.io.Serializable
+
 data class OneActionData(
     /**
      * 动作名称
@@ -17,4 +19,4 @@ data class OneActionData(
      * 动作时长
      */
     val timeCost: CountUnit
-)
+) : Serializable

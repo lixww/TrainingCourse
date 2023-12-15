@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -33,7 +34,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.trainingcourseapp.R
 import com.example.trainingcourseapp.activity.ActionDetailActivity
+import com.example.trainingcourseapp.datamodel.OneActionData
 import com.example.trainingcourseapp.ui.findActivity
+import com.example.trainingcourseapp.ui.fromJson
+import com.example.trainingcourseapp.ui.loadJsonStrFromAssets
 import com.example.trainingcourseapp.ui.theme.TrainingCourseAppTheme
 
 @Preview(showBackground = true)
@@ -58,64 +62,86 @@ fun OneTrainPagePreview() {
 @Composable
 fun ActionList() {
     val context = LocalContext.current.findActivity()
+    val actionsList = context?.loadJsonStrFromAssets("actions.json")?.fromJson<OneActionData>()
 
     LazyColumn(
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(10) {
-            Card(
-                shape = RoundedCornerShape(12.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.background),
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(64.dp)
-                        .background(Color(0xFFFFE082))
-                        .clickable {
-                            context?.startActivity(Intent(context, ActionDetailActivity::class.java))
-                        },
-                    verticalAlignment = Alignment.CenterVertically
+        // check if actionsList is null or empty
+        if (actionsList?.isEmpty() == true) {
+            item {
+                Text(
+                    text = "暂无动作",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.secondary
+                    ),
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        } else {
+            items(actionsList ?: emptyList()) {
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.background),
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_img_placeholder),
-                        contentDescription = "动作示意",
+                    Row(
                         modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxHeight()
-                    )
-                    Text(
-                        text = "动作名称",
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.secondary
-                        ),
-                        modifier = Modifier.padding(8.dp)
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                            .background(Color.Transparent)
-                    )
-                    Text(
-                        text = "50 s",
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.tertiary
-                        ),
-                        modifier = Modifier
-                            .padding(2.dp)
+                            .fillMaxWidth()
+                            .height(64.dp)
+                            .background(Color(0xFFFFE082))
+                            .clickable {
+                                context?.startActivity(
+                                    Intent(
+                                        context,
+                                        ActionDetailActivity::class.java
+                                    ).apply {
+                                        putExtra("actionData", it)
+                                    }
+                                )
+                            },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_img_placeholder),
+                            contentDescription = "动作示意",
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .fillMaxHeight()
+                        )
+                        Text(
+                            text = it.name,
+                            style = TextStyle(
+                                fontSize = 20.sp,
+                                color = MaterialTheme.colorScheme.secondary
+                            ),
+                            modifier = Modifier.padding(8.dp)
+                        )
+                        Spacer(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .background(Color.Transparent)
+                        )
+                        Text(
+                            text = it.timeCost.display,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                color = MaterialTheme.colorScheme.tertiary
+                            ),
+                            modifier = Modifier
+                                .padding(2.dp)
 
-                    )
-                    Icon(
-                        painter = painterResource(R.drawable.round_chevron_right_24),
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier.padding(8.dp)
-                    )
+                        )
+                        Icon(
+                            painter = painterResource(R.drawable.round_chevron_right_24),
+                            contentDescription = "",
+                            tint = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.padding(8.dp)
+                        )
 
+                    }
                 }
             }
         }

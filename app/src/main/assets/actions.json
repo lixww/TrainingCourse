@@ -1,0 +1,24 @@
+[
+  {
+    "actionId": "MukhaSvana",
+    "name": "下犬式",
+    "demonstrateThumbnailUrl": "",
+    "demonstrateDetailUrl": "",
+    "timeCost": {
+      "display": "50 s",
+      "asCount": 1,
+      "asDuration": 50
+    }
+  },
+  {
+    "actionId": "Tadasana",
+    "name": "山式站立",
+    "demonstrateThumbnailUrl": "",
+    "demonstrateDetailUrl": "",
+    "timeCost": {
+      "display": "50 s",
+      "asCount": 1,
+      "asDuration": 50
+    }
+  }
+]
